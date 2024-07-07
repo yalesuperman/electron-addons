@@ -1,0 +1,12 @@
+.eslintcache
+
+node_modules
+
+# OSX
+.DS_Store
+
+.idea
+
+build
+
+dist

@@ -1,0 +1,32 @@
+{
+  "name": "electron-addon",
+  "version": "1.0.0",
+  "description": "electron-addon",
+  "main": "index.js",
+  "scripts": {
+    "configure": "node-gyp configure",
+    "rebuild": "node-gyp rebuild --target=26.2.1 --debug --dist-url=https://electronjs.org/headers",
+    "list": "node-gyp list"
+  },
+  "homepage": "https://github.com/yalesuperman/electron-addons.git",
+  "bugs": {
+    "url": "https://github.com/yalesuperman/electron-addons.git/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yalesuperman/electron-addons.git.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "yalesuperman",
+    "email": "yalesuperman@163.com",
+    "url": "https://github.com/yalesuperman/electron-addons.git"
+  },
+  "devDependencies": {
+    "@electron/rebuild": "^3.6.0",
+    "node-gyp": "^10.1.0"
+  },
+  "dependencies": {
+    "electron": "^26.2.1"
+  }
+}

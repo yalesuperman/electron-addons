@@ -1,0 +1,39 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "cppbuild",
+      "label": "compile video info",
+      "command": "g++",
+      "args": [
+        "-fcolor-diagnostics",
+        "-fansi-escape-codes",
+        "-std=c++17",
+        "-g",
+        "-D__STDC_CONSTANT_MACROS",
+        "-I",
+        "/usr/local/include",
+        "-L",
+        "/usr/local/lib",
+        "-lavformat",
+        "-lavutil",
+        "${workspaceFolder}/debug/test-analyse-mp4.cpp",
+        "-o",
+        "${workspaceFolder}/dist/analyse-mp4"
+      ],
+      "options": {
+        "cwd": "${fileDirname}"
+      },
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "detail": "调试器生成的任务。"
+    }
+  ]
+}
