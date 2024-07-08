@@ -34,7 +34,7 @@ private:
   int handle_streams();
   int h264_mp4toannexb(AVPacket *input_packet);
   int h264_extradata_to_annexb(AVStream *avstream, AVPacket *sps_pkt, AVPacket *pps_pkt, int padding);
-  int add_nalu_to_analysedata(uint8_t nal_type, int32_t nal_size, std::string nal_address, const uint8_t *nal_data, bool add_start_code = false);
+  int add_nalu_to_analysedata(uint8_t nal_type, int32_t nal_size, const uint8_t *nal_data, bool add_start_code = false);
 public:
   AnalyseMp4(std::string input_filename);
   std::string getAnalyseData();
@@ -80,13 +80,14 @@ int AnalyseMp4::handle_streams() {
   AVPacket pps_pkt;
 
   // 从视频stream->codecpar->extradata中获取sp和pps信息
-  h264_extradata_to_annexb(avformat_context_->streams[0], &sps_pkt, &pps_pkt, AV_INPUT_BUFFER_PADDING_SIZE);
-  add_nalu_to_analysedata(7, sps_pkt.size, "1111", sps_pkt.data);
-  add_nalu_to_analysedata(8, pps_pkt.size, "2222", pps_pkt.data);
+  h264_extradata_to_annexb(avformat_context_->streams[video_stream_index], &sps_pkt, &pps_pkt, AV_INPUT_BUFFER_PADDING_SIZE);
+  analyseData["profile_idc"] = avformat_context_->streams[video_stream_index]->codecpar->profile;
+  add_nalu_to_analysedata(7, sps_pkt.size, sps_pkt.data);
+  add_nalu_to_analysedata(8, pps_pkt.size, pps_pkt.data);
 
   while (av_read_frame(avformat_context_, input_packet) >= 0)
   {
-    if (input_packet->stream_index == 0) h264_mp4toannexb(input_packet);
+    if (input_packet->stream_index == video_stream_index) h264_mp4toannexb(input_packet);
   }
 
   if (input_packet != NULL) {
@@ -138,7 +139,7 @@ int AnalyseMp4::h264_mp4toannexb(AVPacket *input_packet) {
     ss << std::hex << reinterpret_cast<void*>((uint8_t*)buf);
     std::string address_str = ss.str();
     
-    add_nalu_to_analysedata(nal_type, nal_size, address_str, buf, true);
+    add_nalu_to_analysedata(nal_type, nal_size, buf, true);
 
     buf += nal_size;
     cumul_size += nal_size + 4;
@@ -239,10 +240,9 @@ int AnalyseMp4::h264_extradata_to_annexb(AVStream *avstream, AVPacket *sps_pkt, 
   return 0;
 }
 
-int AnalyseMp4::add_nalu_to_analysedata(uint8_t nal_type, int32_t nal_size, std::string nal_address, const uint8_t *nal_data, bool add_start_code) {
+int AnalyseMp4::add_nalu_to_analysedata(uint8_t nal_type, int32_t nal_size, const uint8_t *nal_data, bool add_start_code) {
   json packet;
   json packetData;
-  packet["address"] = nal_address;
   packet["nal_type"] = nal_type;
   if (add_start_code) {
     // 如果nalu没有起始码，先添加起始码
@@ -256,7 +256,7 @@ int AnalyseMp4::add_nalu_to_analysedata(uint8_t nal_type, int32_t nal_size, std:
     packetData.push_back(nal_data[i]);
   }
   packet["data"] = packetData;
-  analyseData.push_back(packet);
+  analyseData["data"].push_back(packet);
 }
 
 int AnalyseMp4::analyse() {
@@ -272,9 +272,11 @@ std::string AnalyseMp4::getAnalyseData() {
 AnalyseMp4::AnalyseMp4(std::string input_filename)
 {
   input_filename_ = input_filename;
-  analyseData.clear();
+  json data;
+  analyseData["data"] = data;
 }
 
 AnalyseMp4::~AnalyseMp4()
 {
+  analyseData.clear();
 }
