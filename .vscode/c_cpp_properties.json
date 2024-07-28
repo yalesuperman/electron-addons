@@ -3,9 +3,8 @@
         {
             "name": "Mac",
             "includePath": [
-                "${workspaceFolder}/**",
+                "${workspaceFolder}/src/**",
                 "~/.electron-gyp/**",
-                "${workspaceFolder}",
                 "/usr/local/Cellar/nlohmann-json/3.11.3/include"
             ],
             "defines": [],

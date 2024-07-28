@@ -19,9 +19,41 @@
         "/usr/local/lib",
         "-lavformat",
         "-lavutil",
-        "${workspaceFolder}/debug/test-analyse-mp4.cpp",
+        "${workspaceFolder}/debug/test-analyse-mp4-h264.cpp",
         "-o",
-        "${workspaceFolder}/dist/analyse-mp4"
+        "${workspaceFolder}/dist/analyse-mp4-h264"
+      ],
+      "options": {
+        "cwd": "${fileDirname}"
+      },
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "detail": "调试器生成的任务。"
+    },
+    {
+      "type": "cppbuild",
+      "label": "compile edit-media",
+      "command": "g++",
+      "args": [
+        "-fcolor-diagnostics",
+        "-fansi-escape-codes",
+        "-g",
+        "-D__STDC_CONSTANT_MACROS",
+        "-I",
+        "/usr/local/include",
+        "-L",
+        "/usr/local/lib",
+        "-lavformat",
+        "-lavutil",
+        "-lavcodec",
+        "${workspaceFolder}/src/edit-media/edit-media.cpp",
+        "-o",
+        "${workspaceFolder}/dist/edit-media"
       ],
       "options": {
         "cwd": "${fileDirname}"

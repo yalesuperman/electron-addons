@@ -8,9 +8,9 @@
       "name": "test video info",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/dist/analyse-mp4",
+      "program": "${workspaceFolder}/dist/analyse-mp4-h264",
       "args": [
-        "/Users/demon/Desktop/ffmpeg-develop/assets/small_bunny_1080p_60fps.mp4"
+        "file://${workspaceFolder}/assets/Dragon Ball.mp4"
       ],
       "stopAtEntry": false,
       "cwd": "${fileDirname}",
@@ -18,6 +18,19 @@
       "externalConsole": false,
       "MIMode": "lldb",
       "preLaunchTask": "compile video info"
+    },
+    {
+      "name": "edit-media",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/dist/edit-media",
+      "args": ["-i", "file://${workspaceFolder}/assets/Dragon Ball.mp4", "-ss", "00:00:10", "-to", "00:00:30", "-f", "mp3", "file://${workspaceFolder}/assets/dragon_ball_transform.mp4"],
+      "stopAtEntry": false,
+      "cwd": "${fileDirname}",
+      "environment": [],
+      "externalConsole": false,
+      "MIMode": "lldb",
+      "preLaunchTask": "compile edit-media"
     }
   ]
 }
